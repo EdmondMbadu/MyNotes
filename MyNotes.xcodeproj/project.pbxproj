@@ -14,6 +14,7 @@
 		E495940E2384335F0054A56B /* MyNotes.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E495940C2384335F0054A56B /* MyNotes.xcdatamodeld */; };
 		E49594102384335F0054A56B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E495940F2384335F0054A56B /* Assets.xcassets */; };
 		E49594132384335F0054A56B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E49594112384335F0054A56B /* LaunchScreen.storyboard */; };
+		E495941B238434B00054A56B /* MyNotesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E495941A238434B00054A56B /* MyNotesTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		E495940F2384335F0054A56B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E49594122384335F0054A56B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E49594142384335F0054A56B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E495941A238434B00054A56B /* MyNotesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNotesTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 				E49594112384335F0054A56B /* LaunchScreen.storyboard */,
 				E49594142384335F0054A56B /* Info.plist */,
 				E495940C2384335F0054A56B /* MyNotes.xcdatamodeld */,
+				E495941A238434B00054A56B /* MyNotesTableViewController.swift */,
 			);
 			path = MyNotes;
 			sourceTree = "<group>";
@@ -141,6 +144,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E495941B238434B00054A56B /* MyNotesTableViewController.swift in Sources */,
 				E49594082384335F0054A56B /* ViewController.swift in Sources */,
 				E49594042384335F0054A56B /* AppDelegate.swift in Sources */,
 				E49594062384335F0054A56B /* SceneDelegate.swift in Sources */,
@@ -298,7 +302,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.edmond.MyNotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -316,7 +320,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.edmond.MyNotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
