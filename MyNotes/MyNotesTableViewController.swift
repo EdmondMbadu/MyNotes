@@ -8,6 +8,9 @@
 
 import UIKit
 import CoreData
+
+import UserNotifications
+
 class MyNotesTableViewController: UITableViewController {
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -57,7 +60,51 @@ class MyNotesTableViewController: UITableViewController {
         // reload the data in the Table View Controller
         tableView.reloadData()
     }
+    
+    func deleteNotes(item: Note){
+        context.delete(item)
+        do {
+            // use context to delete ShoppingLists into Core Data
+            try context.save()
+            }catch {
+            print("Error deleting Notes from Core Data!")
+            }
+       loadNotes()
+        
+    }
 
+    
+       func notesDeleteNotification (){
+           
+           var done = false
+           
+           //loop through shooping list items
+        if(notes.count == 0){
+          done = true
+        }
+           
+           // check if done is true
+           if (done == true){
+               
+               // create the content object that controls the content and sound of the notification
+               let content = UNMutableNotificationContent()
+               content.title = "MyNotes"
+               content.body = "All Notes Deleted"
+               content.sound = UNNotificationSound.default
+               
+               //create request object that defines when the notifications will be sent and if it should
+               // be sent repeatidly
+               
+               let trigger = UNTimeIntervalNotificationTrigger (timeInterval: 1, repeats: false)
+               
+               // create request object that is responsible for creating the notification
+               let request = UNNotificationRequest (identifier: "myNotesIdentifier", content: content, trigger: trigger)
+               
+               // post the notification
+               UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+           }
+       }
+       
 
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
 
@@ -65,9 +112,15 @@ class MyNotesTableViewController: UITableViewController {
              
              var titleTextField = UITextField()
              var typeTextField = UITextField()
+        // uncommented code
 //             var dateTextField = UITextField()
               
              
+        // Create the date
+              let date = Date()
+              let format = DateFormatter()
+            format.dateFormat = "yyyy-MM-dd"
+              let formattedDate: String? = format.string(from: date)
              // create an Alert Controller
              
              let alert = UIAlertController(title: "My Notes", message: "", preferredStyle: .alert)
@@ -83,7 +136,8 @@ class MyNotesTableViewController: UITableViewController {
                  
                 newNote.title = titleTextField.text!
                 newNote.type = typeTextField.text!
-//                 newNote.date = dateTextField.text!
+                // uncommented code
+                newNote.date = formattedDate
                  
              
                  // add ShoppingListItem entity into array
@@ -120,10 +174,11 @@ class MyNotesTableViewController: UITableViewController {
                   typeTextField.addTarget(self, action: #selector(self.alertTextFieldDidChange), for: .editingChanged)
                        
                    })
+        
 //             alert.addTextField(configurationHandler: { (field) in
-//                       timeTextField = field
-//                       timeTextField.placeholder = "Time"
-//              timeTextField.addTarget(self, action: #selector(self.alertTextFieldDidChange), for: .editingChanged)
+//                       dateTextField = field
+//                       dateTextField.placeholder = "Date"
+//              dateTextField.addTarget(self, action: #selector(self.alertTextFieldDidChange), for: .editingChanged)
 //
 //                   })
          
@@ -151,15 +206,16 @@ class MyNotesTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MyNotesCell", for: indexPath)
 
         // Configure the cell...
-        let date = Date()
-        let format = DateFormatter()
-        format.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        let formattedDate: String? = format.string(from: date)
+//        let date = Date()
+//        let format = DateFormatter()
+//        format.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//        let formattedDate: String? = format.string(from: date)
 
         let note = notes[indexPath.row]
                cell.textLabel?.text = note.title!
                cell.detailTextLabel!.numberOfLines = 0
-        cell.detailTextLabel?.text = "Type: " + note.type! + "\nCreated: " + formattedDate!
+        cell.detailTextLabel?.text = "Type: " + note.type! + "\nCreated: " + note.date!
+    
                      
 
         return cell
@@ -195,6 +251,77 @@ class MyNotesTableViewController: UITableViewController {
     }
     
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        
+        _ = tableView.dequeueReusableCell(withIdentifier: "MyNotesCell", for: indexPath)
+               
+               // create four textFields
+               
+//               var titleTextField = UITextField()
+//               var typeTextField = UITextField ()
+               var dateTextField = UITextField()
+              
+               
+        let alert = UIAlertController (title: "\(notes[indexPath.row].title!)", message: "", preferredStyle: .alert)
+               
+               let action = UIAlertAction (title: "Change", style: .default, handler: {
+                   (aciton) in
+              
+               // define the actino that wil occur when the alert Controllers change button is pushed
+               let note = self.notes [indexPath.row]
+               
+               
+                note.date = dateTextField.text
+//                student.lname = lnameTextField.text
+//                student.year = yearTextField.text
+//                student.major = majorTextField.text
+
+               self.saveNotes()
+                   
+                    })
+               
+               let cancelAction = UIAlertAction (title: "Cancel", style: .default, handler: {
+                   (cancelAction) in
+               })
+               
+               // add actions to the alert controller
+               alert.addAction(action)
+               alert.addAction(cancelAction)
+               
+               alert.addTextField(configurationHandler: { (field) in
+                  dateTextField = field
+                dateTextField.text = self.notes[indexPath.row].date
+                   
+               })
+               
+//               alert.addTextField(configurationHandler: { (field) in
+//                   lnameTextField = field
+//                   lnameTextField.text = self.students [indexPath.row].lname
+//
+//               })
+//
+//               alert.addTextField(configurationHandler: { (field) in
+//                  yearTextField = field
+//                   yearTextField.text = self.students [indexPath.row].year
+//
+//               })
+//
+//               alert.addTextField(configurationHandler: { (field) in
+//                   majorTextField = field
+//                   majorTextField.text = self.students [indexPath.row].major
+//
+//               })
+//
+               // display the alert controller
+               
+               present (alert, animated: true, completion: nil)
+               tableView.deselectRow(at: indexPath, animated: true)
+        
+            
+               
+        
+    }
 
     /*
     // Override to support conditional editing of the table view.
@@ -204,17 +331,16 @@ class MyNotesTableViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+        let item = notes [ indexPath.row]
+        deleteNotes(item: item)
+        }
+        notesDeleteNotification()
     }
-    */
+    
 
     /*
     // Override to support rearranging the table view.
